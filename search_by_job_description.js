@@ -1,8 +1,9 @@
 /*
 Enter the job search page:
 https://www.linkedin.com/jobs/search/
-do your pre - filter, then copy the content above, open your console in your browser and past the script, then call it with the keywords you want, e.g.
-await search(['python', 'django', 'flask'])
+do your pre - filter, then copy the content bellow, open your console in your browser and past the script, then call it with the keywords you want, e.g.
+
+  await search(['python', 'django', 'flask'])
 */
 
 const timer = ms => new Promise(res => setTimeout(res, ms))
