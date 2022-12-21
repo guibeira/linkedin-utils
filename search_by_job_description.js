@@ -3,11 +3,23 @@ Enter the job search page:
 https://www.linkedin.com/jobs/search/
 do your pre - filter, then copy the content bellow, open your console in your browser and past the script, then call it with the keywords you want, e.g.
 
-  await search(['python', 'django', 'flask'])
+
+  await search()
 */
 
-const timer = ms => new Promise(res => setTimeout(res, ms))
-async function search(content) {
+async function search() {
+  const timer = ms => new Promise(res => setTimeout(res, ms))
+  const content = prompt("Please enter your keywords split by comma", "django, python, flask");
+  if (content == null || content == "") {
+    alert("You must enter something!");
+    return;
+  }
+  const save_msg = prompt("What is the text inside the blue save button?", "Salvar");
+  if (save_msg == null || save_msg == "") {
+    alert("You must enter the message for the script know if the jobs is already saved!");
+    return;
+  }
+  const keywords = content.split(',').map(item => item.trim())
   let has_jobs = true
   while (has_jobs) {
     const pg_button = document.getElementsByClassName("artdeco-pagination__indicator selected")
@@ -36,19 +48,16 @@ async function search(content) {
       job.getElementsByClassName("job-card-list__title")[0].click()
       // check if job is a match
       const detail = document.getElementsByClassName("jobs-description-content__text--stretch")[0]
-      for (const element of content) {
-        const word = element;
-        if (detail.innerText.includes(word.capitalize()) || detail.innerText.includes(word.toLowerCase())) {
+      const found_keyword = keywords.some(keyword => detail.innerText.toLowerCase().includes(keyword.toLowerCase()))
 
-          const button_save = document.getElementsByClassName("jobs-save-button");
-
-          if (button_save.length > 0) {
-            if (button_save[0].innerText.split("\n")[0] == "Salvar") {
-              button_save[0].click()
-              console.log("Saving job: ", job.innerText)
-            } else {
-              console.log("Job already saved: ", job.innerText)
-            }
+      if (found_keyword) {
+        const button_save = document.getElementsByClassName("jobs-save-button");
+        if (button_save.length > 0) {
+          if (button_save[0].innerText.split("\n")[0] == "Salvar") {
+            button_save[0].click()
+            console.log("Saving job: ", job.innerText)
+          } else {
+            console.log("Job already saved: ", job.innerText)
           }
         }
       }
@@ -63,3 +72,4 @@ async function search(content) {
     }
   }
 }
+await search()
