@@ -6,8 +6,8 @@ then copy the content bellow, open your console in your browser and past the scr
   await remove()
 */
 
-const timer = ms => new Promise(res => setTimeout(res, ms))
 async function remove() {
+  const timer = ms => new Promise(res => setTimeout(res, ms))
   n = 0
   while (n < 10) {
     const button = document.getElementsByClassName("artdeco-dropdown")[1]
