@@ -9,7 +9,9 @@ then copy the content bellow, open your console in your browser and past the scr
 async function remove() {
   const timer = ms => new Promise(res => setTimeout(res, ms))
   n = 0
-  while (n < 10) {
+  total_jobs_saved = document.getElementsByClassName('reusable-search__result-container').length
+  console.log("Total jobs saved: " + total_jobs_saved)
+  while (n < total_jobs_saved) {
     const button = document.getElementsByClassName("artdeco-dropdown")[1]
     button.getElementsByTagName('button')[0].click()
     await timer(1000);
@@ -18,4 +20,6 @@ async function remove() {
     await timer(1000);
     n++
   }
+  console.log("All jobs removed")
 }
+await remove()

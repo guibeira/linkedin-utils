@@ -70,10 +70,6 @@ async function save_job(job_url) {
 }
 
 
-
-// iterate over jobs saved
-//
-
 function check_job(job_url) {
   job_url = job_url.split("?")[0]
   let saved_jobs = JSON.parse(localStorage.getItem('jobs'))
@@ -86,8 +82,8 @@ function check_job(job_url) {
 }
 
 async function apply_jobs() {
-  let has_jobs = true
-  let number_saved_jobs = 0
+  let has_jobs = true;
+  let number_saved_jobs = 0;
   while (has_jobs) {
     const jobs = document.getElementsByClassName("reusable-search__result-container")
     if (jobs.length == 0 || number_saved_jobs == jobs.length) {
@@ -108,12 +104,22 @@ async function apply_jobs() {
     job_link.click()
     await timer(3000);
     await apply()
-    await timer(3000);
-    // window.location.href = "https://www.linkedin.com/my-items/saved-jobs/"
+    while (document.readyState != 'complete') {
+      console.log("waiting for page after apply load")
+      await timer(1000);
+    }
+
     window.history.back()
-    await timer(5000);
-    number_saved_jobs++
+    while (document.getElementsByClassName("workflow-results-container artdeco-card pt4").length == 0) {
+      await timer(1000);
+      console.log("waiting for page to load")
+      const location = window.location.href
+      if (location.startsWith("https://www.linkedin.com/my-items/saved-jobs/")) {
+        console.log("Page loaded")
+      }
+    }
   }
+  alert("No more jobs to apply")
 
 }
 

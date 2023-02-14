@@ -30,13 +30,13 @@ async function search() {
 
     // go to the end of page to load all jobs
     scroll.scrollTo(0, 1000)
-    await timer(200);
+    await timer(300);
     scroll.scrollTo(0, 2000)
-    await timer(200);
+    await timer(300);
     scroll.scrollTo(0, 3000)
-    await timer(200);
+    await timer(300);
     scroll.scrollTo(0, 4000)
-    await timer(200);
+    await timer(300);
 
     // get list of jobs
     const jobs = document.getElementsByClassName("job-card-list__entity-lockup")
@@ -48,11 +48,15 @@ async function search() {
       console.log("Checking job: ", job.innerText)
       // click on job  to see details
       job.getElementsByClassName("job-card-list__title")[0].click()
-      const companyName = job.getElementsByClassName("job-card-container__company-name")[0].innerText
-      const ignore = companyNames.some(companyNameToIgnore => companyName.toLowerCase().includes(companyNameToIgnore.toLowerCase()))
-      if (ignore) {
-        console.log("Ignoring job: ", job.innerText)
-        continue
+      const companyName = job.getElementsByClassName("job-card-container__company-name")
+      if (companyName.length > 0) {
+        console.log("Company name: ", companyName[0].innerText)
+        const companyNameText = companyName[0].innerText
+        const ignore = companyNames.some(companyNameToIgnore => companyNameText.toLowerCase().includes(companyNameToIgnore.toLowerCase()))
+        if (ignore) {
+          console.log("Ignoring job: ", job.innerText)
+          continue
+        }
       }
       // check if job is a match
       const detail = document.getElementsByClassName("jobs-description-content__text--stretch")[0]
@@ -69,11 +73,12 @@ async function search() {
           }
         }
       }
-      await timer(1000);
+      await timer(400);
     }
     // go to the next page
     if (next) {
       next.getElementsByTagName("button")[0].click()
+      await timer(400);
     } else {
       has_jobs = false
       alert("No more jobs to check!")
