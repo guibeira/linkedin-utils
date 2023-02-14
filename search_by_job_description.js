@@ -9,7 +9,7 @@ do your pre - filter, then copy the content bellow, open your console in your br
 
 async function search() {
   const timer = ms => new Promise(res => setTimeout(res, ms))
-  const content = prompt("Please enter your keywords split by comma", "django, python, flask");
+  const content = prompt("Please enter your keywords split by comma", "django, fast-api, flask");
   if (content == null || content == "") {
     alert("You must enter something!");
     return;
@@ -19,6 +19,8 @@ async function search() {
     alert("You must enter the message for the script know if the jobs is already saved!");
     return;
   }
+  const companyNameToIgnore = prompt("Company names to ignore", "Jobot, CyberCoders");
+  const companyNames = companyNameToIgnore.split(',').map(item => item.trim())
   const keywords = content.split(',').map(item => item.trim())
   let has_jobs = true
   while (has_jobs) {
@@ -46,6 +48,12 @@ async function search() {
       console.log("Checking job: ", job.innerText)
       // click on job  to see details
       job.getElementsByClassName("job-card-list__title")[0].click()
+      const companyName = job.getElementsByClassName("job-card-container__company-name")[0].innerText
+      const ignore = companyNames.some(companyNameToIgnore => companyName.toLowerCase().includes(companyNameToIgnore.toLowerCase()))
+      if (ignore) {
+        console.log("Ignoring job: ", job.innerText)
+        continue
+      }
       // check if job is a match
       const detail = document.getElementsByClassName("jobs-description-content__text--stretch")[0]
       const found_keyword = keywords.some(keyword => detail.innerText.toLowerCase().includes(keyword.toLowerCase()))
