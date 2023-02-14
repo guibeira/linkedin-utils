@@ -16,8 +16,6 @@ async function apply() {
   }
   apply_button.click()
   await timer(2000);
-  // next button
-  // next button
   let has_next = true
   while (has_next) {
     const modal = document.getElementsByClassName("artdeco-modal-overlay--is-top-layer")
@@ -104,19 +102,15 @@ async function apply_jobs() {
     job_link.click()
     await timer(3000);
     await apply()
-    while (document.readyState != 'complete') {
-      console.log("waiting for page after apply load")
-      await timer(1000);
+
+    while (!window.location.href.includes("saved-jobs")) {
+      window.history.back()
+      await timer(2000);
     }
 
-    window.history.back()
     while (document.getElementsByClassName("workflow-results-container artdeco-card pt4").length == 0) {
       await timer(1000);
-      console.log("waiting for page to load")
-      const location = window.location.href
-      if (location.startsWith("https://www.linkedin.com/my-items/saved-jobs/")) {
-        console.log("Page loaded")
-      }
+      console.log('waiting for page to load')
     }
   }
   alert("No more jobs to apply")
