@@ -9,12 +9,21 @@ const timer = ms => new Promise(res => setTimeout(res, ms))
 
 async function apply() {
   const timer = ms => new Promise(res => setTimeout(res, ms))
+
+  // check if already applied
+  const already_applied = document.getElementsByClassName("post-apply-timeline")
+  if (already_applied.length > 0) {
+    console.log("Already applied")
+    return
+  }
+  // check if it is a easy application
   const apply_button = document.getElementsByClassName("jobs-apply-button")[0]
   if (apply_button.attributes['role'] != undefined) {
     console.log("External link, please apply manually")
     return
   }
   apply_button.click()
+  // wait for modal open
   await timer(2000);
   let has_next = true
   while (has_next) {
@@ -52,7 +61,7 @@ async function apply() {
 
 
 async function save_job(job_url) {
-  // save job on localsotrage
+  // save job on localstorage
   job_url = job_url.split("?")[0]
   let saved_jobs = JSON.parse(localStorage.getItem('jobs'))
   if (saved_jobs == null) {
@@ -112,6 +121,7 @@ async function apply_jobs() {
       await timer(1000);
       console.log('waiting for page to load')
     }
+    number_saved_jobs++
   }
   alert("No more jobs to apply")
 
