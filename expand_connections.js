@@ -8,7 +8,11 @@ if (local_storage_key) {
   global_count = parseInt(local_storage_key) + parseInt(global_count);
 }
 
-let limit = 20;
+let limit = prompt("Please enter the amount connections you want to send", "20");
+if (limit == null || limit == "") {
+  alert("You must enter something!");
+}
+limit = parseInt(limit);
 const timer = ms => new Promise(res => setTimeout(res, ms));
 const people_div = document.getElementsByClassName("reusable-search__entity-result-list list-style-none")[0];
 const add_button = people_div.getElementsByTagName('button');
