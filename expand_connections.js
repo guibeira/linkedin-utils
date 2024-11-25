@@ -14,7 +14,7 @@ if (limit == null || limit == "") {
 }
 limit = parseInt(limit);
 const timer = ms => new Promise(res => setTimeout(res, ms));
-const people_div = document.getElementsByClassName("reusable-search__entity-result-list list-style-none")[0];
+const people_div = document.getElementsByClassName("search-results-container")[0];
 const add_button = people_div.getElementsByTagName('button');
 
 for (let i = 0; i < add_button.length; i++) {
@@ -50,7 +50,7 @@ while (true) {
   await timer(6000);
 }
 async function connect() {
-  let people_div = document.getElementsByClassName("reusable-search__entity-result-list list-style-none")[0];
+  let people_div = document.getElementsByClassName("search-results-container")[0];
   let add_button = people_div.getElementsByTagName('button');
   for (let i = 0; i < add_button.length; i++) {
     if (global_count >= limit) {
