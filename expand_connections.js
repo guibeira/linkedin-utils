@@ -14,16 +14,23 @@ if (limit == null || limit == "") {
 }
 limit = parseInt(limit);
 const timer = ms => new Promise(res => setTimeout(res, ms));
-const people_div = document.getElementsByClassName("search-results-container")[0];
-const add_button = people_div.getElementsByTagName('button');
 
-for (let i = 0; i < add_button.length; i++) {
-  let button = add_button[i];
-  if (button.innerText == "Conectar") {
-    button.click();
-    await timer(1000);
-    document.getElementsByClassName("artdeco-button artdeco-button--2 artdeco-button--primary ember-view ml1")[0].click();
-    global_count++;
+async function connect() {
+  let main_div = document.querySelectorAll('[data-testid="lazy-column"]')[0]
+  let people_div = main_div.children[0].children[0]
+  let add_button = people_div.getElementsByTagName('button');
+  for (let i = 0; i < add_button.length; i++) {
+    if (global_count >= limit) {
+      console.log("Limit reached");
+      break;
+    }
+    let button = add_button[i];
+    if (button.innerText == "Conectar") {
+      button.click();
+      await timer(1000);
+      global_count += 1;
+      localStorage.setItem("count_" + date_fomated, global_count);
+    }
   }
 }
 
@@ -38,10 +45,10 @@ while (true) {
     behavior: "smooth",
   });
   await timer(1000);
-  let next_button = document.getElementsByClassName("artdeco-pagination__button artdeco-pagination__button--next artdeco-button artdeco-button--muted artdeco-button--icon-right artdeco-button--1 artdeco-button--tertiary ember-view")
+  let next_button = document.querySelectorAll('[data-testid="pagination-controls-next-button-visible"]');
   await connect();
   console.log("next_button", next_button);
-  if (next_button[0].classList.contains("artdeco-button--disabled")) {
+  if (next_button.length == 0) {
     console.log("No more pages");
     break;
   }
@@ -49,24 +56,4 @@ while (true) {
   next_button[0].click();
   await timer(6000);
 }
-async function connect() {
-  let people_div = document.getElementsByClassName("search-results-container")[0];
-  let add_button = people_div.getElementsByTagName('button');
-  for (let i = 0; i < add_button.length; i++) {
-    if (global_count >= limit) {
-      console.log("Limit reached");
-      break;
-    }
-    let button = add_button[i];
-    if (button.innerText == "Conectar") {
-      button.click();
-      await timer(1000);
-      global_count += 1;
-      localStorage.setItem("count_" + date_fomated, global_count);
-      document.getElementsByClassName("artdeco-button artdeco-button--2 artdeco-button--primary ember-view ml1")[0].click();
-    }
-  }
-}
 
-
-await connect();
