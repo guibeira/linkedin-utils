@@ -1,4 +1,5 @@
 // get list of buttons
+
 let global_count = 0;
 const day = new Date();
 const date_fomated = day.getDate() + "-" + (day.getMonth() + 1) + "-" + day.getFullYear();
@@ -8,14 +9,7 @@ if (local_storage_key) {
   global_count = parseInt(local_storage_key) + parseInt(global_count);
 }
 
-let limit = prompt("Please enter the amount connections you want to send", "20");
-if (limit == null || limit == "") {
-  alert("You must enter something!");
-}
-limit = parseInt(limit);
-const timer = ms => new Promise(res => setTimeout(res, ms));
-
-async function connect() {
+async function connect(limit) {
   let main_div = document.querySelectorAll('[data-testid="lazy-column"]')[0]
   let people_div = main_div.children[0].children[0]
   let add_button = people_div.getElementsByTagName('button');
@@ -34,26 +28,36 @@ async function connect() {
   }
 }
 
-while (true) {
-  if (global_count >= limit) {
-    console.log("Limit reached");
-    break;
+async function send_connection() {
+  let limit = prompt("Please enter the amount connections you want to send", "20");
+  if (limit == null || limit == "") {
+    alert("You must enter something!");
   }
-  window.scroll({
-    top: 1000,
-    left: 100,
-    behavior: "smooth",
-  });
-  await timer(1000);
-  let next_button = document.querySelectorAll('[data-testid="pagination-controls-next-button-visible"]');
-  await connect();
-  console.log("next_button", next_button);
-  if (next_button.length == 0) {
-    console.log("No more pages");
-    break;
+  limit = parseInt(limit);
+  const timer = ms => new Promise(res => setTimeout(res, ms));
+  while (true) {
+    if (global_count >= limit) {
+      console.log("Limit reached");
+      break;
+    }
+    window.scroll({
+      top: 1000,
+      left: 100,
+      behavior: "smooth",
+    });
+    await timer(1000);
+    let next_button = document.querySelectorAll('[data-testid="pagination-controls-next-button-visible"]');
+    await connect(limit);
+    console.log("next_button", next_button);
+    if (next_button.length == 0) {
+      console.log("No more pages");
+      break;
+    }
+    console.log("Next page");
+    next_button[0].click();
+    await timer(6000);
   }
-  console.log("Next page");
-  next_button[0].click();
-  await timer(6000);
 }
 
+
+await send_connection();
